@@ -1,7 +1,15 @@
 <template>
-  <VDialog v-model="dialog" persistent transition="dialog-bottom-transition">
-    <VCard max-width="600" class="mx-auto text-center">
-      <VCardTitle>You Won!</VCardTitle>
+  <VDialog persistent transition="dialog-bottom-transition">
+    <VCard max-width="500" class="mx-auto text-center">
+      <VCardTitle>
+        {{ props.result }}
+        <VIcon
+          icon="mdi-emoticon-happy-outline"
+          color="primary"
+          v-if="props.result === 'You Won!'"
+        ></VIcon>
+        <VIcon icon="mdi-emoticon-sad-outline" color="primary" v-else></VIcon>
+      </VCardTitle>
       <div class="text-overline mb-2 mx-auto pa-2 text-center rounded-lg word">
         {{ info.word }}
       </div>
@@ -18,28 +26,49 @@
         </VList>
       </VCardText>
       <VCardActions>
-        <VBtn color="primary" variant="outlined" block>New Game</VBtn>
+        <VBtn
+          color="primary"
+          @click.prevent="newGame"
+          variant="outlined"
+          class="mx-auto"
+          >New Game</VBtn
+        >
       </VCardActions>
     </VCard>
   </VDialog>
 </template>
 
 <script setup>
-import { defineProps, ref, reactive } from "vue";
+import { defineProps, ref, defineEmits, toRefs, watch } from "vue";
 import { useWordStore } from "@/stores/words";
 
-const props = defineProps(["showModal", "solution"]);
+const props = defineProps(["solution", "result"]);
+const emit = defineEmits(["newGame"]);
 const store = useWordStore();
-const dialog = ref(true);
 
-const info = reactive({});
+const info = ref({});
 
-store
-  .getWordInfo(props.solution)
-  .then((obj) => {
-    Object.assign(info, obj);
-  })
-  .catch((err) => console.log(err));
+const { solution } = toRefs(props);
+
+const newGame = () => {
+  emit("newGame");
+};
+
+const getInfo = () => {
+  store
+    .getWordInfo(solution.value)
+    .then((obj) => {
+      info.value = obj;
+    })
+    .catch((err) => console.log(err));
+  console.log("called");
+};
+
+getInfo();
+
+watch(solution, () => {
+  getInfo();
+});
 </script>
 
 <style scoped>

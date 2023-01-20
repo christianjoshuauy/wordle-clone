@@ -1,4 +1,4 @@
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 
 const useWordle = (solution, validWords) => {
   const turn = ref(0);
@@ -6,11 +6,11 @@ const useWordle = (solution, validWords) => {
   const guesses = ref([...Array(6)]);
   const history = ref([]);
   const isCorrect = ref(false);
-  const usedKeys = reactive({});
+  const usedKeys = ref({});
   const tip = ref("");
 
   const formatGuess = () => {
-    let solutionArr = [...solution];
+    let solutionArr = [...solution.value];
     let formattedGuess = [...currGuess.value].map((el) => {
       return { key: el, color: "grey" };
     });
@@ -33,21 +33,21 @@ const useWordle = (solution, validWords) => {
   };
 
   const addNewGuess = (coloredGuess) => {
-    if (currGuess.value === solution) {
+    if (currGuess.value === solution.value) {
       isCorrect.value = true;
     }
     guesses.value[turn.value] = coloredGuess;
     history.value.push(currGuess.value);
     turn.value++;
     coloredGuess.forEach((el) => {
-      const currColor = usedKeys[el.key];
+      const currColor = usedKeys.value[el.key];
 
       if (el.color === "green") {
-        usedKeys[el.key] = "green";
+        usedKeys.value[el.key] = "green";
         return;
       }
       if (el.color === "yellow" && currColor !== "green") {
-        usedKeys[el.key] = "yellow";
+        usedKeys.value[el.key] = "yellow";
         return;
       }
       if (
@@ -55,7 +55,7 @@ const useWordle = (solution, validWords) => {
         currColor !== "green" &&
         currColor !== "yellow"
       ) {
-        usedKeys[el.key] = "grey";
+        usedKeys.value[el.key] = "grey";
         return;
       }
     });
@@ -106,7 +106,7 @@ const useWordle = (solution, validWords) => {
     guesses.value = [...Array(6)];
     history.value = [];
     isCorrect.value = false;
-    Object.assign(usedKeys, {});
+    usedKeys.value = {};
   };
 
   return {

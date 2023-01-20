@@ -2,11 +2,13 @@
   <VAlert
     type="error"
     border="start"
+    icon="mdi-robot-confused"
     variant="outlined"
     width="300px"
     class="mx-auto mt-5"
-    >{{ props.tip }}</VAlert
   >
+    {{ props.tip }}
+  </VAlert>
 </template>
 
 <script setup>

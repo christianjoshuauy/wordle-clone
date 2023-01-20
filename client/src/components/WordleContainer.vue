@@ -1,18 +1,25 @@
 <template>
   <div class="WordleContainer">
     <div v-if="state === 'pending'">Loading...</div>
-    <TransitionGroup name="ui" tag="div" v-else-if="state === 'success'">
-      <WordleTip :tip="tip" v-if="tip" key="1" />
-      <WordleGrid
-        :currGuess="currGuess"
-        :guesses="guesses"
-        :turn="turn"
-        key="2"
+    <div v-else-if="state === 'success'">
+      <TransitionGroup name="ui" tag="div">
+        <WordleTip :tip="tip" v-if="tip" key="1" />
+        <WordleGrid
+          :currGuess="currGuess"
+          :guesses="guesses"
+          :turn="turn"
+          key="2"
+        />
+        <KeyBoard :usedKeys="usedKeys" key="3" />
+      </TransitionGroup>
+      <GameEndModal
+        v-model="showModal"
+        :solution="solution"
+        :result="result"
+        @newGame="onNewGame"
       />
-      <KeyBoard :usedKeys="usedKeys" key="3" />
-    </TransitionGroup>
+    </div>
     <div v-else>Error</div>
-    <GameEndModal :showModal="showModal" :solution="solution" />
   </div>
 </template>
 
@@ -30,6 +37,7 @@ import GameEndModal from "./GameEndModal.vue";
 const { state, words } = storeToRefs(useWordStore());
 
 const solution = ref("");
+const result = ref("");
 const showModal = ref(false);
 let {
   currGuess,
@@ -38,9 +46,15 @@ let {
   isCorrect,
   usedKeys,
   turn,
-  // newGame,
+  newGame,
   tip,
 } = {};
+
+const onNewGame = () => {
+  showModal.value = false;
+  solution.value = words.value[randomIndex(0, words.value.length)];
+  newGame();
+};
 
 watch([state], () => {
   if (state.value === "success") {
@@ -52,21 +66,21 @@ watch([state], () => {
       isCorrect,
       usedKeys,
       turn,
-      // newGame,
+      newGame,
       tip,
-    } = useWordle(solution.value, words.value));
+    } = useWordle(solution, words.value));
     watch([isCorrect, turn], () => {
       window.addEventListener("keyup", handleKeyUp);
 
       if (isCorrect.value) {
-        console.log("you win");
         showModal.value = true;
+        result.value = "You Won!";
         window.removeEventListener("keyup", handleKeyUp);
       }
 
       if (turn.value > 5 && !isCorrect.value) {
-        console.log("you lose");
         showModal.value = true;
+        result.value = "You Lost";
         window.removeEventListener("keyup", handleKeyUp);
       }
 
@@ -80,7 +94,7 @@ watch([state], () => {
 <style scoped>
 .WordleContainer {
   width: 100vw;
-  height: 100vh;
+  height: 90vh;
 }
 
 .ui-move,
