@@ -73,13 +73,17 @@ watch([state], () => {
       window.addEventListener("keyup", handleKeyUp);
 
       if (isCorrect.value) {
-        showModal.value = true;
+        setTimeout(() => {
+          showModal.value = true;
+        }, 1500);
         result.value = "You Won!";
         window.removeEventListener("keyup", handleKeyUp);
       }
 
       if (turn.value > 5 && !isCorrect.value) {
-        showModal.value = true;
+        setTimeout(() => {
+          showModal.value = true;
+        }, 1500);
         result.value = "You Lost";
         window.removeEventListener("keyup", handleKeyUp);
       }
