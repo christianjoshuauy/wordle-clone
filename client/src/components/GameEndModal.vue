@@ -61,7 +61,6 @@ const getInfo = () => {
       info.value = obj;
     })
     .catch((err) => console.log(err));
-  console.log("called");
 };
 
 getInfo();

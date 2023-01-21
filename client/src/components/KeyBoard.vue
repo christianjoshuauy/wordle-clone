@@ -3,7 +3,7 @@
     <div
       v-for="letter in keyLetters"
       :key="letter.key"
-      :class="props.usedKeys[letter.key]"
+      :class="props.usedKeys && props.usedKeys[letter.key]"
     >
       {{ letter.key }}
     </div>

@@ -1,18 +1,18 @@
 <template>
   <div class="App">
     <NavBar />
-    <WordleContainer />
+    <Suspense>
+      <RouterView v-slot="{ Component }">
+        <KeepAlive>
+          <component :is="Component"></component>
+        </KeepAlive>
+      </RouterView>
+    </Suspense>
   </div>
 </template>
 
 <script setup>
 import NavBar from "./components/NavBar.vue";
-import WordleContainer from "./components/WordleContainer.vue";
-
-// const handleClick = async () => {
-//   const info = await store.getWordInfo("algae");
-//   console.log(info);
-// };
 </script>
 
 <style scoped>

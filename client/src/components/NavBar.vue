@@ -1,6 +1,8 @@
 <template>
   <header className="Header">
     <h1>Wordle</h1>
+    <RouterLink to="/">First</RouterLink>
+    <RouterLink to="/supersecret">Secret</RouterLink>
   </header>
 </template>
 
