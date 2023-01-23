@@ -71,8 +71,6 @@ const props = defineProps(["letter", "color"]);
 }
 
 .filled {
-  border-color: black;
-  color: black;
   animation: fill 0.1s ease;
 }
 

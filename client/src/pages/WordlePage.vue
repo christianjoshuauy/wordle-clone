@@ -1,5 +1,5 @@
 <template>
-  <div class="WordleContainer">
+  <div class="WordleContainer mt-16">
     <div>
       <TransitionGroup name="ui" tag="div">
         <WordleTip :tip="tip" v-if="tip" key="1" />
@@ -24,7 +24,7 @@
 <script setup>
 import WordleGrid from "../components/WordleGrid.vue";
 import { useWordStore } from "@/stores/words";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { randomIndex } from "@/utils";
 
 import KeyBoard from "../components/KeyBoard.vue";
@@ -58,8 +58,13 @@ const onNewGame = () => {
   showModal.value = false;
   solution.value = words.value[randomIndex(0, words.value.length)];
   newGame();
+  window.addEventListener("keyup", handleKeyUp);
 };
-window.addEventListener("keyup", handleKeyUp);
+
+onMounted(() => {
+  window.addEventListener("keyup", handleKeyUp);
+});
+
 watch([isCorrect, turn], () => {
   if (isCorrect.value) {
     setTimeout(() => {

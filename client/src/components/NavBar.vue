@@ -1,17 +1,39 @@
 <template>
-  <header className="Header">
-    <h1>Wordle</h1>
-    <RouterLink to="/">First</RouterLink>
-    <RouterLink to="/supersecret">Secret</RouterLink>
-  </header>
+  <VAppBar class="px-5">
+    <RouterLink
+      to="/supersecret"
+      class="text-overline text-decoration-none"
+      v-if="path === '/'"
+    >
+      Super Secret
+    </RouterLink>
+    <RouterLink to="/" class="text-decoration-none" v-else
+      ><VIcon icon="mdi-arrow-left"
+    /></RouterLink>
+    <VAppBarTitle>Wordle</VAppBarTitle>
+    <VBtn
+      :icon="
+        props.theme.value === 'light'
+          ? 'mdi-weather-sunny'
+          : 'mdi-weather-night'
+      "
+      @click.prevent="onThemeClick"
+    ></VBtn>
+  </VAppBar>
 </template>
 
-<script setup></script>
+<script setup>
+import { defineProps, defineEmits, computed } from "vue";
+import { useRoute } from "vue-router";
 
-<style scoped>
-.Header {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  padding: 1em 0;
-}
-</style>
+const path = computed(() => useRoute().path);
+
+const props = defineProps(["theme"]);
+const emit = defineEmits(["onThemeClick"]);
+
+const onThemeClick = () => {
+  emit("onThemeClick");
+};
+</script>
+
+<style scoped></style>

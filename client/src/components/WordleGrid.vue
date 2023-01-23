@@ -1,5 +1,5 @@
 <template>
-  <div class="WordleGrid">
+  <div class="mt-4 mx-auto">
     <div v-for="(guess, i) in props.guesses" :key="i">
       <BoxRow :currGuess="props.currGuess" v-if="props.turn === i" />
       <BoxRow :guess="guess" v-else />
@@ -11,7 +11,6 @@
 import BoxRow from "./BoxRow.vue";
 import { defineProps } from "vue";
 
-// const props = defineProps(["currGuess", "guesses", "turn"]);
 const props = defineProps({
   currGuess: {
     type: String,
@@ -30,9 +29,4 @@ const props = defineProps({
 });
 </script>
 
-<style scoped>
-.WordleGrid {
-  margin-top: 1em;
-  transition: all 0.3s ease;
-}
-</style>
+<style scoped></style>
