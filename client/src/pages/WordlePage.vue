@@ -1,8 +1,8 @@
 <template>
-  <div class="WordleContainer mt-16">
+  <div class="WordleContainer">
     <div>
       <TransitionGroup name="ui" tag="div">
-        <WordleTip :tip="tip" v-if="tip" key="1" />
+        <WordleTip :tip="tip" type="error" v-if="tip" key="1" />
         <WordleGrid
           :currGuess="currGuess"
           :guesses="guesses"
@@ -10,12 +10,18 @@
           key="2"
         />
         <KeyBoard :usedKeys="usedKeys" key="3" />
+        <VBtn color="primary" @click="getProfile">Get Profile</VBtn>
       </TransitionGroup>
       <GameEndModal
-        v-model="showModal"
+        v-model="showGameModal"
         :solution="solution"
         :result="result"
         @newGame="onNewGame"
+      />
+      <UserModal
+        v-model="showUserModal"
+        :user="user"
+        @closeModal="handleCloseUserModal"
       />
     </div>
   </div>
@@ -31,17 +37,23 @@ import KeyBoard from "../components/KeyBoard.vue";
 import WordleTip from "../components/WordleTip.vue";
 import GameEndModal from "../components/GameEndModal.vue";
 import useWordle from "@/hooks/useWordle";
+import { useUserStore } from "@/stores/user";
+import UserModal from "@/components/UserModal.vue";
+import { storeToRefs } from "pinia";
 
 const wordsStore = useWordStore();
+const userStore = useUserStore();
 const words = ref(
   await wordsStore.getWords().then((res) => {
     return res;
   })
 );
 
+const { user } = storeToRefs(userStore);
 const solution = ref(words.value[randomIndex(0, words.value.length)]);
 const result = ref("");
-const showModal = ref(false);
+const showGameModal = ref(false);
+const showUserModal = ref(false);
 
 const {
   turn,
@@ -55,7 +67,7 @@ const {
 } = useWordle(solution, words.value);
 
 const onNewGame = () => {
-  showModal.value = false;
+  showGameModal.value = false;
   solution.value = words.value[randomIndex(0, words.value.length)];
   newGame();
   window.addEventListener("keyup", handleKeyUp);
@@ -68,7 +80,7 @@ onMounted(() => {
 watch([isCorrect, turn], () => {
   if (isCorrect.value) {
     setTimeout(() => {
-      showModal.value = true;
+      showGameModal.value = true;
     }, 1500);
     result.value = "You Won!";
     window.removeEventListener("keyup", handleKeyUp);
@@ -76,7 +88,7 @@ watch([isCorrect, turn], () => {
 
   if (turn.value > 5 && !isCorrect.value) {
     setTimeout(() => {
-      showModal.value = true;
+      showGameModal.value = true;
     }, 1500);
     result.value = "You Lost";
     window.removeEventListener("keyup", handleKeyUp);
@@ -84,6 +96,14 @@ watch([isCorrect, turn], () => {
 
   return () => window.removeEventListener("keyup", handleKeyUp);
 });
+
+const getProfile = () => {
+  showUserModal.value = true;
+};
+
+const handleCloseUserModal = () => {
+  showUserModal.value = false;
+};
 </script>
 
 <style scoped>

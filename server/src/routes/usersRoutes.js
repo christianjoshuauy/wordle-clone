@@ -1,12 +1,15 @@
 const express = require("express");
 const controller = require("../controllers/usersController");
+const authenticateToken = require("../middlewares/auth");
 const router = express.Router();
 
 router
-  .get("/", controller.getWords)
-  .post("/", controller.addWord)
-  .get("/:id", controller.getUser)
-  .patch("/:id", controller.updateWord)
-  .delete("/:id", controller.removeWord);
+  .post("/signup", controller.signUp)
+  .post("/login", controller.signIn)
+  .get("/", authenticateToken, controller.getUser)
+  .get("/refresh", controller.refreshUser)
+  .patch("/:id", controller.updateUser)
+  .delete("/:id", controller.removeUser)
+  .get("/signout", controller.signOut);
 
 module.exports = router;

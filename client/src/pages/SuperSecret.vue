@@ -1,34 +1,36 @@
 <template>
-  <div class="mt-16">
-    <SecretInput :digit-count="5" @updateValue="handleUpdateValue" />
-    <div class="d-flex justify-center mt-5">
-      <LetterBox v-for="(letter, i) in wordToGuess" :key="i" :letter="letter" />
-    </div>
-    <VBtn
-      variant="text"
-      append-icon="mdi-chevron-down"
-      class="mt-5 mx-auto text-overline"
-      @click.prevent="showWords = !showWords"
-    >
-      Total words remaining: {{ words.length }}
-    </VBtn>
-    <VSlideYTransition mode="out-in" hide-on-leave="true">
-      <VCard
-        class="d-flex flex-sm-wrap mx-auto w-75 flex-grow-1 justify-center"
-        v-if="showWords"
-      >
-        <span
-          :class="
-            theme === 'light' ? 'text-teal-darken-2' : 'text-teal-lighten-3'
-          "
-          class="text-overline rounded ma-1 pa-1 v-btn--variant-outlined"
-          v-for="word in words.slice(0, 150)"
-          :key="word"
-          >{{ word }}</span
-        >
-      </VCard>
-    </VSlideYTransition>
+  <SecretInput
+    :digit-count="5"
+    @updateValue="handleUpdateValue"
+    @resetWords="handleReset"
+  />
+  <div class="d-flex justify-center mt-5">
+    <LetterBox v-for="(letter, i) in wordToGuess" :key="i" :letter="letter" />
   </div>
+  <VBtn
+    variant="text"
+    append-icon="mdi-chevron-down"
+    class="mt-5 mx-auto text-overline"
+    @click.prevent="showWords = !showWords"
+  >
+    Total words remaining: {{ words.length }}
+  </VBtn>
+  <VSlideYTransition mode="out-in" hide-on-leave="true">
+    <VCard
+      class="d-flex flex-sm-wrap mx-auto w-75 flex-grow-1 justify-center"
+      v-if="showWords"
+    >
+      <span
+        :class="
+          theme === 'light' ? 'text-teal-darken-2' : 'text-teal-lighten-3'
+        "
+        class="text-overline rounded ma-1 pa-1 v-btn--variant-outlined"
+        v-for="word in words.slice(0, 150)"
+        :key="word"
+        >{{ word }}</span
+      >
+    </VCard>
+  </VSlideYTransition>
 </template>
 
 <script setup>
@@ -51,6 +53,7 @@ const words = ref(
 );
 const { bestWord, letterFrequency, removeWords } = useWordleSolver();
 const showWords = ref(false);
+const ORIG_WORDS = words.value;
 
 const handleUpdateValue = (event) => {
   input.value = event;
@@ -76,5 +79,9 @@ const handleGetBestWord = () => {
   wordToGuess.value = bestWord(words.value, letterFrequency(words.value)).split(
     ""
   );
+};
+
+const handleReset = () => {
+  words.value = ORIG_WORDS;
 };
 </script>

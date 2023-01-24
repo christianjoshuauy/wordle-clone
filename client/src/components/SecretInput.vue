@@ -35,6 +35,7 @@
     <VBtn class="mt-6" color="primary" @click.prevent="handleClickBest"
       >Get Best Word</VBtn
     >
+    <VBtn class="mt-6" color="primary" @click.prevent="handleReset">Reset</VBtn>
   </div>
 </template>
 
@@ -49,7 +50,7 @@ const props = defineProps({
     required: true,
   },
 });
-const emit = defineEmits(["updateValue"]);
+const emit = defineEmits(["updateValue", "resetWords"]);
 const letters = reactive([]);
 const coloredLetter = reactive([...Array(5)]);
 const inputCont = ref(null);
@@ -98,6 +99,10 @@ const handleColor = (event, i) => {
 
 const handleClickBest = () => {
   emit("updateValue", { letters, coloredLetter });
+};
+
+const handleReset = () => {
+  emit("resetWords");
 };
 </script>
 

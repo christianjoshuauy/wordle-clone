@@ -7,7 +7,10 @@
     >
       Super Secret
     </RouterLink>
-    <RouterLink to="/" class="text-decoration-none" v-else
+    <RouterLink
+      to="/"
+      class="text-decoration-none"
+      v-else-if="path === '/supersecret'"
       ><VIcon icon="mdi-arrow-left"
     /></RouterLink>
     <VAppBarTitle>Wordle</VAppBarTitle>
@@ -19,20 +22,28 @@
       "
       @click.prevent="onThemeClick"
     ></VBtn>
+    <VBtn @click.prevent="onSignOut" v-if="userStore.isAuth">logout</VBtn>
   </VAppBar>
 </template>
 
 <script setup>
 import { defineProps, defineEmits, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
+const router = useRouter();
+const userStore = useUserStore();
 const path = computed(() => useRoute().path);
-
 const props = defineProps(["theme"]);
 const emit = defineEmits(["onThemeClick"]);
 
 const onThemeClick = () => {
   emit("onThemeClick");
+};
+
+const onSignOut = () => {
+  userStore.signOut();
+  router.replace("/login");
 };
 </script>
 

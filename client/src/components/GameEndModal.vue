@@ -1,6 +1,6 @@
 <template>
   <VDialog persistent transition="dialog-bottom-transition">
-    <VCard max-width="500" class="mx-auto mb-16 text-center">
+    <VCard max-width="500" class="mx-auto mb-16 text-center py-5">
       <VCardTitle>
         {{ props.result }}
         <VIcon
