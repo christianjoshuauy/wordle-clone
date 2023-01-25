@@ -28,10 +28,9 @@
 
 <script setup>
 import { defineProps, defineEmits, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { useUserStore } from "@/stores/user";
 
-const router = useRouter();
 const userStore = useUserStore();
 const path = computed(() => useRoute().path);
 const props = defineProps(["theme"]);
@@ -43,7 +42,6 @@ const onThemeClick = () => {
 
 const onSignOut = () => {
   userStore.signOut();
-  router.replace("/login");
 };
 </script>
 

@@ -61,12 +61,12 @@ const usernameRules = [
 
 const passwordRules = [
   (v) => !!v || "Password is required",
-  (v) => (v && v.length >= 8) || "Password must be at least 6 characters",
+  (v) => (v && v.length >= 8) || "Password must be at least 8 characters",
 ];
 
 const confirmPasswordRules = [
-  (v) => !!v || "Password is required",
-  (v) => v === password.value || "Password must be at least 6 characters",
+  (v) => !!v || "Confirm password is required",
+  (v) => v === password.value || "Password must match",
 ];
 
 const validate = async () => {
@@ -85,9 +85,7 @@ const validate = async () => {
   } catch (err) {
     error.value = err;
   } finally {
-    username.value = "";
-    password.value = "";
-    confirmPassword.value = "";
+    form.value.reset();
     isLoading.value = false;
   }
 };

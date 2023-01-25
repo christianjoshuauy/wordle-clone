@@ -49,14 +49,14 @@ const signIn = (req, res) => {
       { userId: user._id },
       process.env.TOKEN_SECRET_FORMULA,
       {
-        expiresIn: "60s",
+        expiresIn: 60,
       }
     );
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.REFRESH_TOKEN_SECRET_FORMULA,
       {
-        expiresIn: "120s",
+        expiresIn: 3600,
       }
     );
     res.cookie("refreshToken", refreshToken, {

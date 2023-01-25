@@ -32,10 +32,8 @@
 import WordleTip from "@/components/WordleTip.vue";
 import { ref } from "vue";
 import { useUserStore } from "../stores/user";
-import { useRouter } from "vue-router";
 
 const store = useUserStore();
-const router = useRouter();
 const valid = ref(false);
 const username = ref("");
 const password = ref("");
@@ -51,7 +49,7 @@ const usernameRules = [
 
 const passwordRules = [
   (v) => !!v || "Password is required",
-  (v) => (v && v.length >= 8) || "Password must be at least 6 characters",
+  (v) => (v && v.length >= 8) || "Password must be at least 8 characters",
 ];
 
 const validate = async () => {
@@ -65,13 +63,11 @@ const validate = async () => {
         password: password.value,
       });
       message.value = data.message;
-      router.replace("/");
     }
   } catch (err) {
     error.value = err;
   } finally {
-    username.value = "";
-    password.value = "";
+    form.value.reset();
     isLoading.value = false;
   }
 };

@@ -1,11 +1,14 @@
 import { defineStore } from "pinia";
 import axiosInstance from "@/axiosInstance";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 export const useUserStore = defineStore("user", () => {
   const token = ref("");
   const isAuth = computed(() => !!token.value);
   const user = ref({});
+  const router = useRouter();
+  let timeout;
 
   const signUp = async (user) => {
     try {
@@ -27,7 +30,9 @@ export const useUserStore = defineStore("user", () => {
         credentials: "include",
       });
       token.value = res.data.accessToken;
+      router.replace("/");
       await getUserData();
+      autoSignOut();
       return res.data;
     } catch (err) {
       throw err.response.data.error;
@@ -40,6 +45,14 @@ export const useUserStore = defineStore("user", () => {
     });
     token.value = "";
     user.value = "";
+    clearTimeout(timeout);
+    router.replace("/login");
+  };
+
+  const autoSignOut = () => {
+    timeout = setTimeout(async () => {
+      await signOut();
+    }, 3600 * 1000);
   };
 
   const getUserData = async () => {

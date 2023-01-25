@@ -1,29 +1,27 @@
 <template>
   <div class="WordleContainer">
-    <div>
-      <TransitionGroup name="ui" tag="div">
-        <WordleTip :tip="tip" type="error" v-if="tip" key="1" />
-        <WordleGrid
-          :currGuess="currGuess"
-          :guesses="guesses"
-          :turn="turn"
-          key="2"
-        />
-        <KeyBoard :usedKeys="usedKeys" key="3" />
-        <VBtn color="primary" @click="getProfile">Get Profile</VBtn>
-      </TransitionGroup>
-      <GameEndModal
-        v-model="showGameModal"
-        :solution="solution"
-        :result="result"
-        @newGame="onNewGame"
+    <TransitionGroup name="ui" tag="div">
+      <WordleTip :tip="tip" type="error" v-if="tip" key="1" />
+      <WordleGrid
+        :currGuess="currGuess"
+        :guesses="guesses"
+        :turn="turn"
+        key="2"
       />
-      <UserModal
-        v-model="showUserModal"
-        :user="user"
-        @closeModal="handleCloseUserModal"
-      />
-    </div>
+      <KeyBoard :usedKeys="usedKeys" key="3" />
+      <VBtn key="4" @click="getProfile" icon="mdi-account"></VBtn>
+    </TransitionGroup>
+    <GameEndModal
+      v-model="showGameModal"
+      :solution="solution"
+      :result="result"
+      @newGame="onNewGame"
+    />
+    <UserModal
+      v-model="showUserModal"
+      :user="user"
+      @closeModal="handleCloseUserModal"
+    />
   </div>
 </template>
 

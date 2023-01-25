@@ -1,12 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "./stores/user";
-import SignUp from "./pages/SignUp.vue";
-import SignIn from "./pages/SignIn.vue";
 
 const WordleContainer = () => import("./pages/WordlePage.vue");
 const SuperSecret = () => import("./pages/SuperSecret.vue");
-// const SignUp = () => import("./pages/SignUp.vue");
-// const SignIn = () => import("./pages/SignIn.vue");
+const SignUp = () => import("./pages/SignUp.vue");
+const SignIn = () => import("./pages/SignIn.vue");
 
 const routes = [
   {

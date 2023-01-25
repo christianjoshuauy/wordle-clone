@@ -15,7 +15,7 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cookieParser("test"));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use("/api/v1/words", wordsRoutes);
 app.use("/api/v1/auth", usersRoutes);
