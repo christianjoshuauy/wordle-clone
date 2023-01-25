@@ -8,7 +8,7 @@ router
   .post("/login", controller.signIn)
   .get("/", authenticateToken, controller.getUser)
   .get("/refresh", controller.refreshUser)
-  .patch("/:id", controller.updateUser)
+  .patch("/", authenticateToken, controller.updateUser)
   .delete("/:id", controller.removeUser)
   .get("/signout", controller.signOut);
 

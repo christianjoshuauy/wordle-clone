@@ -62,6 +62,13 @@ export const useUserStore = defineStore("user", () => {
     user.value = res.data.userData;
   };
 
+  const updateUser = async (user) => {
+    const res = await axiosInstance.patch("/auth", user, {
+      headers: { Authorization: "Bearer " + token.value },
+    });
+    console.log(res.data);
+  };
+
   const refreshUser = async () => {
     try {
       const res = await axiosInstance.get("/auth/refresh", {
@@ -73,5 +80,15 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
-  return { token, user, isAuth, signUp, signIn, signOut, refreshUser };
+  return {
+    token,
+    user,
+    isAuth,
+    signUp,
+    signIn,
+    signOut,
+    getUserData,
+    updateUser,
+    refreshUser,
+  };
 });

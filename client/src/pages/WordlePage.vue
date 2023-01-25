@@ -28,7 +28,7 @@
 <script setup>
 import WordleGrid from "../components/WordleGrid.vue";
 import { useWordStore } from "@/stores/words";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { randomIndex } from "@/utils";
 
 import KeyBoard from "../components/KeyBoard.vue";
@@ -52,6 +52,7 @@ const solution = ref(words.value[randomIndex(0, words.value.length)]);
 const result = ref("");
 const showGameModal = ref(false);
 const showUserModal = ref(false);
+const currStreak = ref(0);
 
 const {
   turn,
@@ -64,32 +65,53 @@ const {
   tip,
 } = useWordle(solution, words.value);
 
-const onNewGame = () => {
+const onNewGame = async () => {
   showGameModal.value = false;
   solution.value = words.value[randomIndex(0, words.value.length)];
   newGame();
   window.addEventListener("keyup", handleKeyUp);
 };
 
-onMounted(() => {
+onMounted(async () => {
+  await userStore.getUserData();
   window.addEventListener("keyup", handleKeyUp);
 });
 
+onUnmounted(async () => {});
+
+const handleGameEnd = async (resultMessage) => {
+  setTimeout(() => {
+    showGameModal.value = true;
+  }, 1500);
+  result.value = resultMessage;
+  user.value.played_words++;
+
+  if (isCorrect.value) {
+    currStreak.value++;
+  }
+
+  if (currStreak.value > user.value.highest_streak) {
+    user.value.highest_streak = currStreak.value;
+  }
+
+  if (user.value.avg_no_of_guesses) {
+    user.value.avg_no_of_guesses =
+      (user.value.avg_no_of_guesses + turn.value) / 2;
+  } else {
+    user.value.avg_no_of_guesses = turn.value;
+  }
+
+  await userStore.updateUser(user.value);
+  window.removeEventListener("keyup", handleKeyUp);
+};
+
 watch([isCorrect, turn], () => {
   if (isCorrect.value) {
-    setTimeout(() => {
-      showGameModal.value = true;
-    }, 1500);
-    result.value = "You Won!";
-    window.removeEventListener("keyup", handleKeyUp);
+    handleGameEnd("You Won!");
   }
 
   if (turn.value > 5 && !isCorrect.value) {
-    setTimeout(() => {
-      showGameModal.value = true;
-    }, 1500);
-    result.value = "You Lost";
-    window.removeEventListener("keyup", handleKeyUp);
+    handleGameEnd("You Lost");
   }
 
   return () => window.removeEventListener("keyup", handleKeyUp);

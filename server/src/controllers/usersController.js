@@ -104,7 +104,20 @@ const getUser = (req, res) => {
   });
 };
 
-const updateUser = (req, res) => {};
+const updateUser = (req, res) => {
+  const userId = req.user.userId;
+  const { played_words, highest_streak, avg_no_of_guesses } = req.body;
+  pool.query(
+    queries.updateUser,
+    [played_words, highest_streak, avg_no_of_guesses, userId],
+    (err, results) => {
+      if (err) {
+        return res.status(401).json({ error: err });
+      }
+      return res.status(200).json({ message: "Updated successfully" });
+    }
+  );
+};
 
 const removeUser = (req, res) => {};
 
@@ -135,7 +148,7 @@ const refreshUser = (req, res) => {
         const newAccessToken = jwt.sign(
           { userId: user._id },
           process.env.TOKEN_SECRET_FORMULA,
-          { expiresIn: "60s" }
+          { expiresIn: 60 }
         );
         return res.status(200).json({ token: newAccessToken });
       });
