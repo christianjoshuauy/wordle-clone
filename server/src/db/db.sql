@@ -4,10 +4,14 @@ CREATE TABLE words (
     definitions VARCHAR(300)[] NOT NULL
 );
 
-CREATE TABLE user_entry (
-    id UUID NOT NULL PRIMARY KEY,
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+CREATE TABLE users (
+    _id UUID NOT NULL PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
-    streak INT NOT NULL,
-    tries_per_word INT NOT NULL,
+    password VARCHAR(50) NOT NULL,
+    played_words INT NOT NULL,
+    highest_streak INT NOT NULL,
+    avg_no_of_guesses INT NOT NULL,
     UNIQUE(username)
 );

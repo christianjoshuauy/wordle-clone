@@ -1,13 +1,15 @@
 <template>
   <VApp class="text-center">
     <NavBar :theme="theme.global.name" @onThemeClick="onThemeClick" />
-    <Suspense>
-      <RouterView v-slot="{ Component }">
-        <KeepAlive>
-          <component :is="Component"></component>
-        </KeepAlive>
-      </RouterView>
-    </Suspense>
+    <VMain>
+      <Suspense>
+        <RouterView v-slot="{ Component }">
+          <KeepAlive>
+            <component :is="Component"></component>
+          </KeepAlive>
+        </RouterView>
+      </Suspense>
+    </VMain>
   </VApp>
 </template>
 

@@ -1,8 +1,8 @@
 <template>
   <VAlert
-    type="error"
+    :type="props.type"
     border="start"
-    icon="mdi-robot-confused"
+    :icon="props.type === 'error' ? 'mdi-robot-confused' : 'mdi-robot-happy'"
     variant="outlined"
     width="300px"
     class="mx-auto mt-5"
@@ -14,5 +14,5 @@
 <script setup>
 import { defineProps } from "vue";
 
-const props = defineProps(["tip"]);
+const props = defineProps(["tip", "type"]);
 </script>
