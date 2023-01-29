@@ -1,7 +1,7 @@
 <template>
   <VDialog transition="dialog-bottom-transition">
-    <VCard max-width="500" class="mx-auto mb-16 text-left pa-5">
-      <VCardTitle>{{ props.user.name }}</VCardTitle>
+    <VCard max-width="500" class="mx-auto mb-16 text-center pa-5">
+      <VCardTitle>{{ props.user.username }}</VCardTitle>
       <VCardSubtitle class="mb-n5">Stats</VCardSubtitle>
       <VCardText>
         <div>Played Words: {{ props.user.played_words }}</div>

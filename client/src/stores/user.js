@@ -23,11 +23,6 @@ export const useUserStore = defineStore("user", () => {
     try {
       const res = await axiosInstance.post("/auth/login", user, {
         withCredentials: true,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
       });
       token.value = res.data.accessToken;
       router.replace("/");
@@ -63,10 +58,9 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const updateUser = async (user) => {
-    const res = await axiosInstance.patch("/auth", user, {
+    await axiosInstance.patch("/auth", user, {
       headers: { Authorization: "Bearer " + token.value },
     });
-    console.log(res.data);
   };
 
   const refreshUser = async () => {
@@ -80,6 +74,13 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  const getLeaderboard = async () => {
+    const res = await axiosInstance.get("/auth/leaderboard", {
+      headers: { Authorization: "Bearer " + token.value },
+    });
+    return res.data.leaderboard;
+  };
+
   return {
     token,
     user,
@@ -90,5 +91,6 @@ export const useUserStore = defineStore("user", () => {
     getUserData,
     updateUser,
     refreshUser,
+    getLeaderboard,
   };
 });

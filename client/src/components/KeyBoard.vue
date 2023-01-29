@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5">
+  <div class="my-5">
     <div v-for="(row, i) in keyLetters" :key="i">
       <div
         v-for="letter in row"

@@ -9,7 +9,8 @@
         key="2"
       />
       <KeyBoard :usedKeys="usedKeys" key="3" />
-      <VBtn key="4" @click="getProfile" icon="mdi-account"></VBtn>
+      <VBtn key="4" class="mr-2" @click="getProfile" icon="mdi-account"></VBtn>
+      <VBtn key="5" @click="getLeaderboard" icon="mdi-finance"></VBtn>
     </TransitionGroup>
     <GameEndModal
       v-model="showGameModal"
@@ -21,6 +22,11 @@
       v-model="showUserModal"
       :user="user"
       @closeModal="handleCloseUserModal"
+    />
+    <LeaderboardModal
+      v-model="showLeaderboardModal"
+      :leaderboard="leaderboard"
+      @closeModal="handleCloseLeaderboardModal"
     />
   </div>
 </template>
@@ -38,6 +44,7 @@ import useWordle from "@/hooks/useWordle";
 import { useUserStore } from "@/stores/user";
 import UserModal from "@/components/UserModal.vue";
 import { storeToRefs } from "pinia";
+import LeaderboardModal from "@/components/LeaderboardModal.vue";
 
 const wordsStore = useWordStore();
 const userStore = useUserStore();
@@ -52,7 +59,9 @@ const solution = ref(words.value[randomIndex(0, words.value.length)]);
 const result = ref("");
 const showGameModal = ref(false);
 const showUserModal = ref(false);
+const showLeaderboardModal = ref(false);
 const currStreak = ref(0);
+const leaderboard = ref([]);
 
 const {
   turn,
@@ -123,6 +132,15 @@ const getProfile = () => {
 
 const handleCloseUserModal = () => {
   showUserModal.value = false;
+};
+
+const getLeaderboard = async () => {
+  leaderboard.value = await userStore.getLeaderboard();
+  showLeaderboardModal.value = true;
+};
+
+const handleCloseLeaderboardModal = () => {
+  showLeaderboardModal.value = false;
 };
 </script>
 

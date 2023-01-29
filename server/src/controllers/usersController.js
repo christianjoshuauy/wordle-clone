@@ -83,23 +83,17 @@ const signOut = (req, res) => {
 const getUser = (req, res) => {
   const userId = req.user.userId;
 
-  pool.query(queries.getUserById, [userId], (err, results) => {
+  pool.query(queries.getUserDataById, [userId], (err, results) => {
     if (err) {
       return res.status(401).json({ error: err });
     }
     if (!results.rows.length) {
       return res.status(404).json({ error: "No user found" });
     }
-    const { username, played_words, highest_streak, avg_no_of_guesses } =
-      results.rows[0];
+    const userData = results.rows[0];
     return res.status(200).json({
       message: "Retrieved User Data",
-      userData: {
-        name: username,
-        played_words,
-        highest_streak,
-        avg_no_of_guesses,
-      },
+      userData,
     });
   });
 };
@@ -156,6 +150,18 @@ const refreshUser = (req, res) => {
   );
 };
 
+const getLeaderboard = (req, res) => {
+  pool.query(queries.getLeaderboard, (err, results) => {
+    if (err) {
+      return res.status(400).json({ error: err });
+    }
+    return res.status(200).json({
+      message: "Leaderboard returned successfully",
+      leaderboard: results.rows,
+    });
+  });
+};
+
 module.exports = {
   signUp,
   signIn,
@@ -164,4 +170,5 @@ module.exports = {
   updateUser,
   removeUser,
   refreshUser,
+  getLeaderboard,
 };
