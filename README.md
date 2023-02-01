@@ -8,4 +8,8 @@ A better Wordle game with leaderboards, stats, and word information for a better
 
 ## Backend 
 
-### Node.js, Express, and PostgreSQL
+### Node.js and Express
+
+## Database
+
+### PostgreSQL
